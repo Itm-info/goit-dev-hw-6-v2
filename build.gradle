@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "org.flywaydb.flyway" version "9.19.0"
 }
 
 group = 'itm'
@@ -12,6 +13,19 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    implementation 'com.h2database:h2:2.1.212'
+
+    // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+    implementation 'org.flywaydb:flyway-core:9.19.0'
+}
+
+flyway {
+    url = 'jdbc:h2:~/test;TRACE_LEVEL_SYSTEM_OUT=2'
+    user = ''
+    password = ''
+    cleanDisabled = false
 }
 
 test {

@@ -6,20 +6,21 @@ import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-
-        new DatabaseInitService.initDb();
-        
         System.out.println("Hello world!");
 
-        long id = ClientService.create("Name");
+        DatabaseInitService.initDb();
 
-        System.out.println("Just added: " + ClientService.getById(id));
+        ClientService clientService = new ClientService();
 
-        ClientService.setName(id,"New_Name");
+        long id = clientService.create("Name");
 
-        ClientService.deleteById(id-1);
+        clientService.getById(id);
 
-        ClientService.listAll().forEach(System.out::println);
+        clientService.setName(id,"New_Name");
+
+        clientService.deleteById(id-1);
+
+        clientService.listAll().forEach(System.out::println);
 
     }
 }

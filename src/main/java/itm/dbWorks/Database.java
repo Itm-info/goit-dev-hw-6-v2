@@ -3,21 +3,13 @@ package itm.dbWorks;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
-
 
 class Database {
+    public static final String CONNECTION_URL = "jdbc:h2:~/test";
     private static final Database database = new Database();
     private Connection conn;
-    private Statement stmt;
     private Database() {
-/*      String dbUrl = "jdbc:mysql://*:3306/goit?&serverTimezone=Europe/Kyiv"; */
-        String dbUrl = "jdbc:h2:~/test";
-
-        try {
-            conn = DriverManager.getConnection(dbUrl); // , dbUser, dbPass);
-            stmt = conn.createStatement();
-        }
+        try { conn = DriverManager.getConnection(CONNECTION_URL); }
         catch ( SQLException e) { e.printStackTrace(); }
     }
 
@@ -27,9 +19,5 @@ class Database {
 
     public Connection getConnection() {
         return conn;
-    }
-
-    public Statement getStatement() {
-        return stmt;
     }
 }

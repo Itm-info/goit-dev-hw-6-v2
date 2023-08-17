@@ -73,9 +73,10 @@ public class ClientService {
     public List<Client> listAll() throws SQLException {
         ResultSet rs = las.executeQuery();
 
-        Client client = new Client();
         List<Client> res = new ArrayList<>();
+        //Client client = new Client(); // HardToAssert Error
         while(rs.next()) {
+            Client client = new Client();
             client.setId(rs.getLong("id"));
             client.setName(rs.getString("name"));
             res.add(client);

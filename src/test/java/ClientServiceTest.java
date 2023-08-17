@@ -2,6 +2,7 @@ import itm.dbWorks.ClientService;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,6 +50,29 @@ public class ClientServiceTest {
 
         assertThrows(IllegalArgumentException.class, () -> clientService.deleteById(expectedBadIdZero) );
         assertThrows(IllegalArgumentException.class, () -> clientService.deleteById(expectedBadIdSubZero) );
+
+        // Test listAll
+        long firstClientId = 0L;
+        String firstClientName = "";
+        for(long i=0L; ++i < 1000L;) {
+            firstClientName = clientService.getById(i);
+            if(! firstClientName.isEmpty() ) { firstClientId = i; break; }
+        }
+        long finalFirstClientId = firstClientId;
+        String finalFirstClientName = firstClientName;
+        AtomicBoolean firstIdEncountered = new AtomicBoolean(false);
+        clientService.listAll().forEach((c) -> {
+            try {
+                if(c.getId() == finalFirstClientId ) {
+                    firstIdEncountered.set(true);
+                    assertEquals(finalFirstClientName, c.getName()); }
+                if(c.getId() == idOfGoodNameClientCreated ) assertEquals(expectedGoodName, clientService.getById(c.getId()));
+                assertEquals(c.getName(), clientService.getById(c.getId()));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        assertTrue(firstIdEncountered.get()); // test against HardToAssert Error
     }
 }
 
